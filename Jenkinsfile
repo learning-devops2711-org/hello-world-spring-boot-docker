@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git 'https://github.com/learning-devops2711/hello-world-spring-boot-docker' // Change this
+        git branch: 'main', url: 'https://github.com/learning-devops2711/hello-world-spring-boot-docker'
       }
     }
 
