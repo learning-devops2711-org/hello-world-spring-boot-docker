@@ -1,11 +1,6 @@
 pipeline {
   agent any
 
-  environment {
-    IMAGE_NAME = 'java21-app'
-    IMAGE_TAG = 'latest'
-  }
-
   stages {
     stage('Checkout') {
       steps {
@@ -13,13 +8,17 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
+    stage('List Files') {
       steps {
-        script {
-          sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
-        }
+        sh 'ls -la'
+        sh 'git rev-parse --is-inside-work-tree'
       }
     }
-    
+
+    stage('Build Docker Image') {
+      steps {
+        sh 'docker build -t my-spring-app .'
+      }
+    }
   }
 }
