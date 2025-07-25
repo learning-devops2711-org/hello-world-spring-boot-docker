@@ -1,4 +1,4 @@
-name: Docker Build Only
+name: Build with buildah
 
 on:
   push:
@@ -29,9 +29,9 @@ jobs:
 
       - name: Build image with Buildah
         run: |
-          buildah bud -t ghcr.io/${{ github.repository }}/hello-world-spring-boot-docker-buildah:${{ env.SHORT_SHA }} .
+          buildah bud -t ghcr.io/${{ github.repository }}-buildah:${{ env.SHORT_SHA }} .
 
       - name: Push image to ghcr.io
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository }}/hello-world-spring-boot-docker-buildah:${{ env.SHORT_SHA }}
+          IMAGE_NAME=ghcr.io/${{ github.repository }}-buildah:${{ env.SHORT_SHA }}
           buildah push $IMAGE_NAME
