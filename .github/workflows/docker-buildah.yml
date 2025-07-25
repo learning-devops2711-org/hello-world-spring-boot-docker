@@ -1,0 +1,37 @@
+name: Docker Build Only
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write  # Required to push to GHCR
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install Buildah
+        run: |
+          sudo apt update
+          sudo apt install -y buildah
+
+      - name: Log in to ghcr.io
+        run: |
+          echo "${{ secrets.GHCR_TOKEN }}" | buildah login -u ${{ github.actor }} --password-stdin ghcr.io
+
+      - name: Build image with Buildah
+        run: |
+          buildah bud -t ghcr.io/${{ github.repository }}/hello-world-spring-boot-docker:${{ env.SHORT_SHA }} .
+
+      - name: Push image to ghcr.io
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}/hello-world-spring-boot-docker:${{ env.SHORT_SHA }}
+          buildah push $IMAGE_NAME
