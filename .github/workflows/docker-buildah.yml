@@ -25,13 +25,13 @@ jobs:
 
       - name: Log in to ghcr.io
         run: |
-          echo "${{ secrets.GHCR_TOKEN }}" | buildah login -u ${{ github.actor }} --password-stdin ghcr.io
+          echo "${{ secrets.GITHUB_TOKEN }}" | buildah login -u ${{ github.actor }} --password-stdin ghcr.io
 
       - name: Build image with Buildah
         run: |
-          buildah bud -t ghcr.io/${{ github.repository }}/hello-world-spring-boot-docker:${{ env.SHORT_SHA }} .
+          buildah bud -t ghcr.io/${{ github.repository }}/hello-world-spring-boot-docker-buildah:${{ env.SHORT_SHA }} .
 
       - name: Push image to ghcr.io
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository }}/hello-world-spring-boot-docker:${{ env.SHORT_SHA }}
+          IMAGE_NAME=ghcr.io/${{ github.repository }}/hello-world-spring-boot-docker-buildah:${{ env.SHORT_SHA }}
           buildah push $IMAGE_NAME
